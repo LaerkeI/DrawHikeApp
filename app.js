@@ -36,17 +36,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Show canvas and hide map after map is fully loaded
         map.on('load', () => {
-            mapDiv.style.display = 'none';
-            canvas.style.display = 'block';
             loadingSpinner.style.display = 'none';
-            reloadButton.style.display = 'none';
+            mapDiv.style.display = 'block';
+            canvas.style.display = 'block';
+        });
+
+        map.whenReady(() => {
+            if (!map.hasLayer(L.tileLayer)) {
+                showError("Failed to load the map. Please try reloading the page.");
+            }
         });
     }
 
     function preloadMapTiles(lat, lng) {
-        // Preload map tiles logic
+        // Example of preloading tiles (optional)
+        const zoomLevels = [12, 13, 14]; // Adjust as needed
+        zoomLevels.forEach(zoom => {
+            const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            const bounds = map.getBounds();
+            for (let lat = bounds.getSouth(); lat <= bounds.getNorth(); lat += 0.1) {
+                for (let lng = bounds.getWest(); lng <= bounds.getEast(); lng += 0.1) {
+                    tileLayer.getTileUrl(L.point(lat, lng, zoom));
+                }
+            }
+        });
     }
 
     function showError(message) {

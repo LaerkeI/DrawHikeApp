@@ -16,12 +16,9 @@
             align-items: center;
         }
         #loadingSpinner {
-            display: none;
             font-size: 24px;
-            margin-right: 10px;
         }
         #reloadButton {
-            display: none;
             padding: 10px 20px;
             font-size: 18px;
             cursor: pointer;
@@ -30,9 +27,12 @@
             border: none;
             border-radius: 5px;
             outline: none;
+            margin-top: 10px;
         }
         #map, #drawingCanvas {
             display: none;
+            width: 100%;
+            height: 100%;
         }
     </style>
     <!-- Include Leaflet CSS -->
@@ -40,7 +40,7 @@
 </head>
 <body>
     <div id="loadingSpinner">Loading...</div>
-    <button id="reloadButton">Reload</button>
+    <button id="reloadButton" style="display: none;">Reload</button>
     <div id="map"></div>
     <canvas id="drawingCanvas"></canvas>
     <!-- Include Leaflet JavaScript -->
