@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const canvas = document.getElementById('drawingCanvas');
     const context = canvas.getContext('2d');
     const mapDiv = document.getElementById('map');
+    let map, userLat, userLng;
 
     // Set the canvas to full screen
     canvas.width = window.innerWidth;
@@ -48,18 +49,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
         context.closePath();
     }
 
-    function plotRouteOnMap(points) {
-        // Hide canvas and show map
-        canvas.style.display = 'none';
-        mapDiv.style.display = 'block';
-
-        // Initialize map
-        const map = L.map('map').setView([51.505, -0.09], 13);
+    function initializeMap(lat, lng) {
+        map = L.map('map').setView([lat, lng], 13);
 
         // Add OpenStreetMap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
+    }
+
+    function plotRouteOnMap(points) {
+        // Hide canvas and show map
+        canvas.style.display = 'none';
+        mapDiv.style.display = 'block';
 
         // Placeholder for conversion logic: Convert canvas points to LatLng
         const mapBounds = map.getBounds();
@@ -67,12 +69,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const mapHeight = mapDiv.offsetHeight;
 
         const mapPoints = points.map(point => {
-            const lat = mapBounds.getSouth() + (point.y / mapHeight) * (mapBounds.getNorth() - mapBounds.getSouth());
-            const lng = mapBounds.getWest() + (point.x / mapWidth) * (mapBounds.getEast() - mapBounds.getWest());
+            const lat = userLat + ((point.y - canvas.height / 2) / mapHeight) * (mapBounds.getNorth() - mapBounds.getSouth());
+            const lng = userLng + ((point.x - canvas.width / 2) / mapWidth) * (mapBounds.getEast() - mapBounds.getWest());
             return [lat, lng];
         });
 
         // Draw route on map
         L.polyline(mapPoints, { color: 'red' }).addTo(map);
+    }
+
+    // Get the user's current location
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            userLat = position.coords.latitude;
+            userLng = position.coords.longitude;
+            initializeMap(userLat, userLng);
+        }, error => {
+            console.error("Error getting location: " + error.message);
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
     }
 });
