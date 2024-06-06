@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const mapDiv = document.getElementById('map');
     let map, userLat, userLng;
 
+    // Hide canvas initially
+    canvas.style.display = 'none';
+
     // Get the user's current location
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
@@ -26,10 +29,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Show map and hide canvas after map is fully loaded
+        // Show canvas and hide map after map is fully loaded
         map.on('load', () => {
-            mapDiv.style.display = 'block';
-            canvas.style.display = 'none';
+            mapDiv.style.display = 'none';
+            canvas.style.display = 'block';
         });
     }
 
