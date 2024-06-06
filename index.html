@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Drawing App</title>
+    <title>Simple Drawing App with Map</title>
     <style>
         body, html {
             margin: 0;
@@ -12,14 +12,25 @@
             width: 100%;
             height: 100%;
         }
-        canvas {
-            display: block;
+        #drawingCanvas, #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #map {
+            display: none;
         }
     </style>
+    <!-- Include Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
     <canvas id="drawingCanvas"></canvas>
-
+    <div id="map"></div>
+    <!-- Include Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
