@@ -63,19 +63,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
         canvas.style.display = 'none';
         mapDiv.style.display = 'block';
 
-        // Placeholder for conversion logic: Convert canvas points to LatLng
-        const mapBounds = map.getBounds();
-        const mapWidth = mapDiv.offsetWidth;
-        const mapHeight = mapDiv.offsetHeight;
+        // Initialize map if not already initialized
+        if (!map) {
+            initializeMap(userLat, userLng);
+        }
 
-        const mapPoints = points.map(point => {
-            const lat = userLat + ((point.y - canvas.height / 2) / mapHeight) * (mapBounds.getNorth() - mapBounds.getSouth());
-            const lng = userLng + ((point.x - canvas.width / 2) / mapWidth) * (mapBounds.getEast() - mapBounds.getWest());
+        // Convert canvas coordinates to geographic coordinates
+        const bounds = map.getBounds();
+        const mapWidth = canvas.width;
+        const mapHeight = canvas.height;
+        const centerLatLng = map.getCenter();
+
+        const latLngPoints = points.map(point => {
+            const lat = centerLatLng.lat + (point.y - mapHeight / 2) * (bounds.getNorth() - bounds.getSouth()) / mapHeight;
+            const lng = centerLatLng.lng + (point.x - mapWidth / 2) * (bounds.getEast() - bounds.getWest()) / mapWidth;
             return [lat, lng];
         });
 
         // Draw route on map
-        L.polyline(mapPoints, { color: 'red' }).addTo(map);
+        L.polyline(latLngPoints, { color: 'red' }).addTo(map);
     }
 
     // Get the user's current location
