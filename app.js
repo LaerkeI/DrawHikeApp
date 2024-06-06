@@ -26,9 +26,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Show map and hide canvas
-        mapDiv.style.display = 'block';
-        canvas.style.display = 'none';
+        // Show map and hide canvas after map is fully loaded
+        map.on('load', () => {
+            mapDiv.style.display = 'block';
+            canvas.style.display = 'none';
+        });
     }
 
     // Set up touch events
