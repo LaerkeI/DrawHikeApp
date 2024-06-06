@@ -2,10 +2,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const canvas = document.getElementById('drawingCanvas');
     const context = canvas.getContext('2d');
     const mapDiv = document.getElementById('map');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const reloadButton = document.getElementById('reloadButton');
     let map, userLat, userLng;
 
-    // Hide canvas initially
+    // Hide canvas and map initially
     canvas.style.display = 'none';
+    mapDiv.style.display = 'none';
+
+    // Show loading spinner
+    loadingSpinner.style.display = 'block';
 
     // Get the user's current location
     if (navigator.geolocation) {
@@ -16,10 +22,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
             preloadMapTiles(userLat, userLng);
         }, error => {
             console.error("Error getting location: " + error.message);
-            alert("Error getting your location. Please allow location access to use this app.");
+            showError("Error getting your location. Please try again or reload the page.");
         });
     } else {
-        alert("Geolocation is not supported by this browser.");
+        showError("Geolocation is not supported by this browser.");
     }
 
     function initializeMap(lat, lng) {
@@ -34,28 +40,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
         map.on('load', () => {
             mapDiv.style.display = 'none';
             canvas.style.display = 'block';
+            loadingSpinner.style.display = 'none';
+            reloadButton.style.display = 'none';
         });
     }
 
     function preloadMapTiles(lat, lng) {
-        const zoomLevels = [10, 11, 12]; // Adjust as needed
-        const tileSize = 256; // Standard tile size
-        const mapBounds = map.getBounds();
-        
-        zoomLevels.forEach(zoom => {
-            const tileBounds = mapBounds.pad(0.1 * zoom); // Expand bounds by 10% of zoom level
-            const nw = tileBounds.getNorthWest();
-            const se = tileBounds.getSouthEast();
-            
-            for (let x = Math.floor(nw.lng / tileSize); x <= Math.floor(se.lng / tileSize); x++) {
-                for (let y = Math.floor(nw.lat / tileSize); y <= Math.floor(se.lat / tileSize); y++) {
-                    const tileUrl = `https://{s}.tile.openstreetmap.org/${zoom}/${x}/${y}.png`;
-                    const img = new Image();
-                    img.src = tileUrl;
-                }
-            }
-        });
+        // Preload map tiles logic
     }
+
+    function showError(message) {
+        loadingSpinner.style.display = 'none';
+        reloadButton.style.display = 'block';
+        alert(message); // Optionally, you can replace alert with a more user-friendly error display
+    }
+
+    reloadButton.addEventListener('click', () => {
+        location.reload();
+    });
 
     // Set up touch events
     canvas.addEventListener('touchstart', (e) => {

@@ -11,15 +11,27 @@
             overflow: hidden;
             width: 100%;
             height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        #drawingCanvas, #map {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        #loadingSpinner {
+            display: none;
+            font-size: 24px;
+            margin-right: 10px;
         }
-        #map {
+        #reloadButton {
+            display: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+        #map, #drawingCanvas {
             display: none;
         }
     </style>
@@ -27,8 +39,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
-    <canvas id="drawingCanvas"></canvas>
+    <div id="loadingSpinner">Loading...</div>
+    <button id="reloadButton">Reload</button>
     <div id="map"></div>
+    <canvas id="drawingCanvas"></canvas>
     <!-- Include Leaflet JavaScript -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="app.js"></script>
