@@ -3,48 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Drawing App with Map</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        #loadingSpinner {
-            font-size: 24px;
-        }
-        #reloadButton {
-            padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            outline: none;
-            margin-top: 10px;
-        }
-        #map, #drawingCanvas {
-            display: none;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
-    <!-- Include Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <title>Mapy.cz Example</title>
+    <script src="https://api.mapy.cz/loader.js"></script>
+    <script>Loader.load()</script>
 </head>
 <body>
-    <div id="loadingSpinner">Loading...</div>
-    <button id="reloadButton" style="display: none;">Reload</button>
-    <div id="map"></div>
-    <canvas id="drawingCanvas"></canvas>
-    <!-- Include Leaflet JavaScript -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="app.js"></script>
+    <div id="map" style="width: 100%; height: 500px;"></div>
+    <script src="map.js"></script>
 </body>
 </html>
