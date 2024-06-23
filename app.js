@@ -1,3 +1,5 @@
+const API_KEY = 'nt-4zpOTz80hBGZmee2Tb1tD4D8F_yJe58PbK-s3Tzg';
+
 // Check if the API key is available
 if (typeof API_KEY === 'undefined') {
     console.error('API_KEY is not defined. Please make sure config.js is set up correctly.');
