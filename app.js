@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            console.log('Connected successfully to Mapy API :))');
+            console.log('Connected successfully to Mapy API :)))');
         })
         .catch(error => {
             console.error('Error connecting to Mapy API:', error);
