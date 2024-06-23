@@ -1,5 +1,7 @@
-// Replace with your own API key
-const API_KEY = 'eyJpIjoyNTcsImMiOjE2Njc0ODU2MjN9.c_UlvdpHGTI_Jb-TNMYlDYuIkCLJaUpi911RdlwPsAY';
+// Check if the API key is available
+if (typeof API_KEY === 'undefined') {
+    console.error('API_KEY is not defined. Please make sure config.js is set up correctly.');
+}
 
 // Initialize the map and set its view to Aalborg's coordinates
 const map = L.map('map').setView([57.0488, 9.9217], 13); // Aalborg coordinates
