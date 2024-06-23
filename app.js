@@ -1,61 +1,45 @@
-const API_KEY = 'nt-4zpOTz80hBGZmee2Tb1tD4D8F_yJe58PbK-s3Tzg';
+// replace with your own API key
+const API_KEY = 'eyJpIjoyNTcsImMiOjE2Njc0ODU2MjN9.c_UlvdpHGTI_Jb-TNMYlDYuIkCLJaUpi911RdlwPsAY';
 
-// Check if the API key is available
-if (typeof API_KEY === 'undefined') {
-    console.error('API_KEY is not defined. Please make sure config.js is set up correctly.');
-}
+/*
+We create the map and set its initial coordinates and zoom.
+See https://leafletjs.com/reference.html#map
+*/
+const map = L.map('map').setView([57.0000000, 9.8981184], 16);
 
-// Initialize the map and set its view to Aalborg's coordinates
-const map = L.map('map').setView([57.0488, 9.9217], 13); // Aalborg coordinates
+/*
+Then we add a raster tile layer with Mapy NG tiles
+See https://leafletjs.com/reference.html#tilelayer
+*/
+L.tileLayer(`https://api.mapy.cz/v1/maptiles/basic/256/{z}/{x}/{y}?apikey=${API_KEY}`, {
+  minZoom: 0,
+  maxZoom: 19,
+  attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">&copy; Seznam.cz a.s. a další</a>',
+}).addTo(map);
 
-// Define tile layers
-const tileLayers = {
-    'Basic': L.tileLayer(`https://api.mapy.cz/v1/maptiles/basic/256/{z}/{x}/{y}?apikey=${API_KEY}`, {
-        minZoom: 0,
-        maxZoom: 19,
-        attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">&copy; Seznam.cz a.s. a další</a>',
-    }),
-    'Outdoor': L.tileLayer(`https://api.mapy.cz/v1/maptiles/outdoor/256/{z}/{x}/{y}?apikey=${API_KEY}`, {
-        minZoom: 0,
-        maxZoom: 19,
-        attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">&copy; Seznam.cz a.s. a další</a>',
-    }),
-    'Winter': L.tileLayer(`https://api.mapy.cz/v1/maptiles/winter/256/{z}/{x}/{y}?apikey=${API_KEY}`, {
-        minZoom: 0,
-        maxZoom: 19,
-        attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">&copy; Seznam.cz a.s. a další</a>',
-    }),
-    'Aerial': L.tileLayer(`https://api.mapy.cz/v1/maptiles/aerial/256/{z}/{x}/{y}?apikey=${API_KEY}`, {
-        minZoom: 0,
-        maxZoom: 19,
-        attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">&copy; Seznam.cz a.s. a další</a>',
-    }),
-};
-
-// Add the default tile layer to the map
-tileLayers['Outdoor'].addTo(map);
-
-// Add layer control to the map
-L.control.layers(tileLayers).addTo(map);
-
-// Custom logo control
+/*
+We also require you to include our logo somewhere over the map.
+We create our own map control implementing a documented interface,
+that shows a clickable logo.
+See https://leafletjs.com/reference.html#control
+*/
 const LogoControl = L.Control.extend({
-    options: {
-        position: 'bottomleft',
-    },
+  options: {
+    position: 'bottomleft',
+  },
 
-    onAdd: function (map) {
-        const container = L.DomUtil.create('div');
-        const link = L.DomUtil.create('a', '', container);
+  onAdd: function (map) {
+    const container = L.DomUtil.create('div');
+    const link = L.DomUtil.create('a', '', container);
 
-        link.setAttribute('href', 'http://mapy.cz/');
-        link.setAttribute('target', '_blank');
-        link.innerHTML = '<img src="https://api.mapy.cz/img/api/logo.svg" />';
-        L.DomEvent.disableClickPropagation(link);
+    link.setAttribute('href', 'http://mapy.cz/');
+    link.setAttribute('target', '_blank');
+    link.innerHTML = '<img src="https://api.mapy.cz/img/api/logo.svg" />';
+    L.DomEvent.disableClickPropagation(link);
 
-        return container;
-    },
+    return container;
+  },
 });
 
-// Add the custom logo control to the map
+// finally we add our LogoControl to the map
 new LogoControl().addTo(map);
