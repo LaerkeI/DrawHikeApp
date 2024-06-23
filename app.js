@@ -1,16 +1,57 @@
-document.addEventListener("DOMContentLoaded", function() {
-    var center = SMap.Coords.fromWGS84(9.9217, 57.0488); // Aalborg coordinates
-    var map = new SMap(JAK.gel("map"), center, 13); // Zoom level 13
-    map.addDefaultLayer(SMap.DEF_BASE).enable(); // Add the default base layer
+// Replace with your own API key
+const API_KEY = 'eyJpIjoyNTcsImMiOjE2Njc0ODU2MjN9.c_UlvdpHGTI_Jb-TNMYlDYuIkCLJaUpi911RdlwPsAY';
 
-    // Add controls
-    map.addDefaultControls();
+// Initialize the map and set its view to Aalborg's coordinates
+const map = L.map('map').setView([57.0488, 9.9217], 13); // Aalborg coordinates
 
-    // Optionally, you can add markers or other features to the map
-    var layer = new SMap.Layer.Marker();
-    map.addLayer(layer);
-    layer.enable();
+// Define tile layers
+const tileLayers = {
+    'Basic': L.tileLayer(`https://api.mapy.cz/v1/maptiles/basic/256/{z}/{x}/{y}?apikey=${API_KEY}`, {
+        minZoom: 0,
+        maxZoom: 19,
+        attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">&copy; Seznam.cz a.s. a další</a>',
+    }),
+    'Outdoor': L.tileLayer(`https://api.mapy.cz/v1/maptiles/outdoor/256/{z}/{x}/{y}?apikey=${API_KEY}`, {
+        minZoom: 0,
+        maxZoom: 19,
+        attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">&copy; Seznam.cz a.s. a další</a>',
+    }),
+    'Winter': L.tileLayer(`https://api.mapy.cz/v1/maptiles/winter/256/{z}/{x}/{y}?apikey=${API_KEY}`, {
+        minZoom: 0,
+        maxZoom: 19,
+        attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">&copy; Seznam.cz a.s. a další</a>',
+    }),
+    'Aerial': L.tileLayer(`https://api.mapy.cz/v1/maptiles/aerial/256/{z}/{x}/{y}?apikey=${API_KEY}`, {
+        minZoom: 0,
+        maxZoom: 19,
+        attribution: '<a href="https://api.mapy.cz/copyright" target="_blank">&copy; Seznam.cz a.s. a další</a>',
+    }),
+};
 
-    var marker = new SMap.Marker(center, "marker");
-    layer.addMarker(marker);
+// Add the default tile layer to the map
+tileLayers['Outdoor'].addTo(map);
+
+// Add layer control to the map
+L.control.layers(tileLayers).addTo(map);
+
+// Custom logo control
+const LogoControl = L.Control.extend({
+    options: {
+        position: 'bottomleft',
+    },
+
+    onAdd: function (map) {
+        const container = L.DomUtil.create('div');
+        const link = L.DomUtil.create('a', '', container);
+
+        link.setAttribute('href', 'http://mapy.cz/');
+        link.setAttribute('target', '_blank');
+        link.innerHTML = '<img src="https://api.mapy.cz/img/api/logo.svg" />';
+        L.DomEvent.disableClickPropagation(link);
+
+        return container;
+    },
 });
+
+// Add the custom logo control to the map
+new LogoControl().addTo(map);
